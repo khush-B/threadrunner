@@ -53,6 +53,35 @@ int main(int argc, char *argv[])
         }
 
         printf("Client connected\n");
+unsigned char request[49];
+
+size_t received = 0;
+
+while (received < sizeof(request)) {
+
+    ssize_t bytes = recv(
+        client_fd,
+        request + received,
+        sizeof(request) - received,
+        0
+    );
+
+    if (bytes < 0) {
+        perror("recv");
+        break;
+    }
+
+    if (bytes == 0) {
+        printf("Client disconnected\n");
+        break;
+    }
+
+    received += (size_t)bytes;
+}
+
+printf("Received %zu of %zu bytes\n",
+       received,
+       sizeof(request));
 
         close(client_fd);
     }
