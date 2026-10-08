@@ -4,6 +4,13 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <stdint.h>
+#include <inttypes.h>
+#include "messages.h"
+#include <errno.h>
+
+#define LONESHA256_IMPLEMENTATION
+#include "lonesha256.h"
 
 int main(int argc, char *argv[])
 {
@@ -53,7 +60,7 @@ int main(int argc, char *argv[])
         }
 
         printf("Client connected\n");
-unsigned char request[49];
+unsigned char request[PACKET_REQUEST_SIZE];
 
 size_t received = 0;
 
@@ -83,9 +90,109 @@ printf("Received %zu of %zu bytes\n",
        received,
        sizeof(request));
 
-        close(client_fd);
+
+
+    if (received != sizeof(request)) {
+    close(client_fd);
+    continue;
+}
+
+unsigned char hash[SHA256_DIGEST_LENGTH];
+uint64_t start_network;
+uint64_t end_network;
+
+memcpy(hash,
+       request + PACKET_REQUEST_HASH_OFFSET,
+       sizeof(hash));
+
+memcpy(&start_network,
+       request + PACKET_REQUEST_START_OFFSET,
+       sizeof(start_network));
+
+memcpy(&end_network,
+       request + PACKET_REQUEST_END_OFFSET,
+       sizeof(end_network));
+
+uint64_t start = be64toh(start_network);
+uint64_t end = be64toh(end_network);
+uint8_t priority = request[PACKET_REQUEST_PRIO_OFFSET];
+
+printf("Hash: ");
+for (size_t i = 0; i < sizeof(hash); i++) {
+    printf("%02x", (unsigned int)hash[i]);
+}
+printf("\n");
+
+printf("Start: %" PRIu64 "\n", start);
+printf("End: %" PRIu64 "\n", end);
+printf("Priority: %u\n", (unsigned int)priority);
+
+/* Search [start, end): start is included, end is excluded. */
+uint64_t answer = 0;
+int found = 0;
+
+for (uint64_t candidate = start; candidate < end; candidate++) {
+    uint64_t candidate_le = htole64(candidate);
+    unsigned char candidate_hash[SHA256_DIGEST_LENGTH];
+
+    if (lonesha256(candidate_hash,
+                  (const unsigned char *)&candidate_le,
+                  sizeof(candidate_le)) != 0) {
+        fprintf(stderr, "SHA256 calculation failed\n");
+        break;
     }
 
+    if (memcmp(candidate_hash, hash, sizeof(hash)) == 0) {
+        answer = candidate;
+        found = 1;
+        break;
+    }
+
+}
+if (!found) {
+    fprintf(stderr, "No matching number found in the range\n");
+    close(client_fd);
+    continue;
+}
+
+printf("Answer: %" PRIu64 "\n", answer);
+
+/* Encode the answer in network byte order. */
+uint64_t answer_network = htobe64(answer);
+unsigned char response[PACKET_RESPONSE_SIZE];
+
+memcpy(response + PACKET_RESPONSE_ANSWER_OFFSET,
+       &answer_network,
+       sizeof(answer_network));
+
+/* TCP may send fewer bytes than requested. */
+size_t sent = 0;
+
+while (sent < sizeof(response)) {
+    ssize_t bytes = send(client_fd,
+                         response + sent,
+                         sizeof(response) - sent,
+                         MSG_NOSIGNAL);
+
+    if (bytes < 0) {
+        if (errno == EINTR) {
+            continue;
+        }
+        perror("send");
+        break;
+    }
+
+    if (bytes == 0) {
+        fprintf(stderr, "send made no progress\n");
+        break;
+    }
+
+    sent += (size_t)bytes;
+}
+
+printf("Sent %zu of %zu bytes\n", sent, sizeof(response));
+        close(client_fd);
+    }
     close(server_fd);
     return 0;
 }
