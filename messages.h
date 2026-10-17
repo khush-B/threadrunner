@@ -12,7 +12,8 @@
   #define le64toh(x) OSSwapLittleToHostInt64(x)
 #endif
 
-#include <openssl/sha.h>
+/* SHA-256 always produces 32 digest bytes. Hashing uses lonesha256. */
+#define SHA256_DIGEST_LENGTH 32
 
 #define PACKET_REQUEST_SIZE           (SHA256_DIGEST_LENGTH + 8 + 8 + 1)
 #define PACKET_REQUEST_HASH_OFFSET    0
