@@ -1,0 +1,298 @@
+Worker pool: 4 workers, queue capacity 1024
+Server listening on port 47055
+Incomplete request: 0 of 49 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 256
+Priority: 7
+No matching number found in the range
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+No matching number found in the range
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Incomplete request: 0 of 49 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Incomplete request: 1 of 49 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Incomplete request: 32 of 49 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Incomplete request: 48 of 49 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 9223372036854776064
+End: 9223372036854776074
+Priority: 7
+Answer: 9223372036854776071
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 265
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 18446744073709551611
+End: 18446744073709551615
+Priority: 7
+Answer: 18446744073709551614
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 1
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 2
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 3
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 4
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 5
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 6
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 8
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 9
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 10
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 11
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 12
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 266
+End: 256
+Priority: 7
+No matching number found in the range
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 263
+End: 264
+Priority: 7
+Answer: 263
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 256
+End: 266
+Priority: 7
+Answer: 256
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 0
+End: 1
+Priority: 7
+Answer: 0
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 10
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 8
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 2
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 9
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 4
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 2
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 4
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 2
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 6
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 2
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 5
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 10
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 1
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 3
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 7
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 1
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 10
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 8
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 6
+Sent 8 of 8 bytes
+Received 49 of 49 bytes
+Start: 1
+End: 11
+Priority: 1
+Answer: 5
+Sent 8 of 8 bytes

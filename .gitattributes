@@ -5,3 +5,7 @@ Makefile text eol=lf
 messages.h text eol=lf
 .gitignore text eol=lf
 .gitattributes text eol=lf
+
+# Keep captured evidence in LF; preserve original trailing spaces in raw logs.
+experiments/worker-pool/results/* text eol=lf
+experiments/worker-pool/results/*.log whitespace=-blank-at-eol

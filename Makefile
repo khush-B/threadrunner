@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -O2
 
 server: server.c messages.h lonesha256.h
-	$(CC) $(CFLAGS) server.c -o server
+	$(CC) $(CPPFLAGS) $(CFLAGS) -pthread server.c -o server $(LDFLAGS) $(LDLIBS)
 
 .PHONY: clean
 clean:

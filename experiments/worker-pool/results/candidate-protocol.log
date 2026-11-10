@@ -1,0 +1,17 @@
+test_empty_range_and_server_recovers (__main__.ProtocolTests.test_empty_range_and_server_recovers) ... ok
+test_end_is_excluded_and_server_recovers (__main__.ProtocolTests.test_end_is_excluded_and_server_recovers) ... ok
+test_fragmented_request (__main__.ProtocolTests.test_fragmented_request) ... ok
+test_incomplete_request_and_server_recovers (__main__.ProtocolTests.test_incomplete_request_and_server_recovers) ... ok
+test_large_unsigned_values (__main__.ProtocolTests.test_large_unsigned_values) ... ok
+test_last_candidate_is_included (__main__.ProtocolTests.test_last_candidate_is_included) ... ok
+test_near_uint64_max (__main__.ProtocolTests.test_near_uint64_max) ... ok
+test_repeated_connections_and_priorities (__main__.ProtocolTests.test_repeated_connections_and_priorities) ... ok
+test_reversed_range_and_server_recovers (__main__.ProtocolTests.test_reversed_range_and_server_recovers) ... ok
+test_single_candidate_range (__main__.ProtocolTests.test_single_candidate_range) ... ok
+test_start_is_included (__main__.ProtocolTests.test_start_is_included) ... ok
+test_zero_is_a_valid_answer (__main__.ProtocolTests.test_zero_is_a_valid_answer) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.151s
+
+OK

@@ -1,0 +1,10 @@
+{
+  "commit": "b9362c4717e2192f6bfe2fd9941476a097d1b92a",
+  "seed": 5041,
+  "expected_requests": 500,
+  "completed_requests": 500,
+  "correct_answers": 500,
+  "passed": true,
+  "average_latency_us": 2508132637.256,
+  "priority_weighted_latency_us": 3154329362.05
+}

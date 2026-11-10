@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <pthread.h>
 
 #include "messages.h"
 #define LONESHA256_IMPLEMENTATION
@@ -87,6 +88,185 @@ static int send_answer(int fd, uint64_t answer)
     return 0;
 }
 
+
+/* Fixed workers and a bounded FIFO queue of accepted sockets. */
+#define QUEUE_CAPACITY 1024
+#define MAX_WORKERS 64
+
+static struct {
+    int sockets[QUEUE_CAPACITY];
+    size_t head;
+    size_t tail;
+    size_t count;
+    pthread_mutex_t mutex;
+    pthread_cond_t not_empty;
+    pthread_cond_t not_full;
+} client_queue = {
+    .mutex = PTHREAD_MUTEX_INITIALIZER,
+    .not_empty = PTHREAD_COND_INITIALIZER,
+    .not_full = PTHREAD_COND_INITIALIZER
+};
+
+static void check_pthread(int error, const char *operation)
+{
+    if (error != 0) {
+        fprintf(stderr, "%s: %s\n", operation, strerror(error));
+        exit(EXIT_FAILURE);
+    }
+}
+
+static void queue_client(int fd)
+{
+    check_pthread(pthread_mutex_lock(&client_queue.mutex),
+                  "pthread_mutex_lock");
+
+    while (client_queue.count == QUEUE_CAPACITY) {
+        check_pthread(
+            pthread_cond_wait(&client_queue.not_full,
+                              &client_queue.mutex),
+            "pthread_cond_wait");
+    }
+
+    client_queue.sockets[client_queue.tail] = fd;
+    client_queue.tail =
+        (client_queue.tail + 1) % QUEUE_CAPACITY;
+    client_queue.count++;
+
+    check_pthread(pthread_cond_signal(&client_queue.not_empty),
+                  "pthread_cond_signal");
+    check_pthread(pthread_mutex_unlock(&client_queue.mutex),
+                  "pthread_mutex_unlock");
+}
+
+static int next_client(void)
+{
+    check_pthread(pthread_mutex_lock(&client_queue.mutex),
+                  "pthread_mutex_lock");
+
+    while (client_queue.count == 0) {
+        check_pthread(
+            pthread_cond_wait(&client_queue.not_empty,
+                              &client_queue.mutex),
+            "pthread_cond_wait");
+    }
+
+    int fd = client_queue.sockets[client_queue.head];
+    client_queue.head =
+        (client_queue.head + 1) % QUEUE_CAPACITY;
+    client_queue.count--;
+
+    check_pthread(pthread_cond_signal(&client_queue.not_full),
+                  "pthread_cond_signal");
+    check_pthread(pthread_mutex_unlock(&client_queue.mutex),
+                  "pthread_mutex_unlock");
+
+    return fd;
+}
+
+static int worker_count(size_t *count)
+{
+    long cpus = sysconf(_SC_NPROCESSORS_ONLN);
+    *count = cpus > 0 ? (size_t)cpus : 1;
+
+    if (*count > MAX_WORKERS) {
+        *count = MAX_WORKERS;
+    }
+
+    const char *value = getenv("THREADRUNNER_WORKERS");
+    if (value != NULL) {
+        char *end = NULL;
+        errno = 0;
+        unsigned long parsed = strtoul(value, &end, 10);
+
+        if (errno != 0 || value[0] == '\0' || *end != '\0'
+            || parsed < 1 || parsed > MAX_WORKERS) {
+            fprintf(stderr,
+                    "THREADRUNNER_WORKERS must be 1 to %d\n",
+                    MAX_WORKERS);
+            return -1;
+        }
+
+        *count = (size_t)parsed;
+    }
+
+    return 0;
+}
+
+static void handle_client(int client_fd)
+{
+    unsigned char request[PACKET_REQUEST_SIZE];
+    if (receive_request(client_fd, request) != 1) {
+        close(client_fd);
+        return;
+    }
+
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    uint64_t start_network;
+    uint64_t end_network;
+    memcpy(hash, request + PACKET_REQUEST_HASH_OFFSET, sizeof(hash));
+    memcpy(&start_network, request + PACKET_REQUEST_START_OFFSET,
+           sizeof(start_network));
+    memcpy(&end_network, request + PACKET_REQUEST_END_OFFSET,
+           sizeof(end_network));
+
+    uint64_t start = be64toh(start_network);
+    uint64_t end = be64toh(end_network);
+    uint8_t priority = request[PACKET_REQUEST_PRIO_OFFSET];
+    printf("Received %d of %d bytes\n",
+           PACKET_REQUEST_SIZE, PACKET_REQUEST_SIZE);
+    printf("Start: %" PRIu64 "\nEnd: %" PRIu64 "\nPriority: %u\n",
+           start, end, (unsigned int)priority);
+
+    uint64_t answer = 0;
+    int found = reverse_hash(hash, start, end, &answer);
+    if (found == 1) {
+        printf("Answer: %" PRIu64 "\n", answer);
+        (void)send_answer(client_fd, answer);
+    } else if (found == 0) {
+        fprintf(stderr, "No matching number found in the range\n");
+    }
+    close(client_fd);
+}
+
+
+static void *worker_main(void *unused)
+{
+    (void)unused;
+
+    while (1) {
+        int client_fd = next_client();
+        handle_client(client_fd);
+    }
+
+    return NULL;
+}
+
+static int start_worker_pool(void)
+{
+    size_t count;
+    if (worker_count(&count) != 0) {
+        return -1;
+    }
+
+    for (size_t i = 0; i < count; i++) {
+        pthread_t thread;
+        int error = pthread_create(
+            &thread, NULL, worker_main, NULL);
+
+        if (error != 0) {
+            fprintf(stderr, "pthread_create: %s\n",
+                    strerror(error));
+            return -1;
+        }
+
+        check_pthread(pthread_detach(thread), "pthread_detach");
+    }
+
+    printf("Worker pool: %zu workers, queue capacity %d\n",
+           count, QUEUE_CAPACITY);
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
     if (argc != 2) {
@@ -134,6 +314,10 @@ int main(int argc, char *argv[])
         close(server_fd);
         return 1;
     }
+    if (start_worker_pool() != 0) {
+        close(server_fd);
+        return 1;
+    }
     printf("Server listening on port %lu\n", port);
 
     while (1) {
@@ -146,37 +330,6 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        unsigned char request[PACKET_REQUEST_SIZE];
-        if (receive_request(client_fd, request) != 1) {
-            close(client_fd);
-            continue;
-        }
-
-        unsigned char hash[SHA256_DIGEST_LENGTH];
-        uint64_t start_network;
-        uint64_t end_network;
-        memcpy(hash, request + PACKET_REQUEST_HASH_OFFSET, sizeof(hash));
-        memcpy(&start_network, request + PACKET_REQUEST_START_OFFSET,
-               sizeof(start_network));
-        memcpy(&end_network, request + PACKET_REQUEST_END_OFFSET,
-               sizeof(end_network));
-
-        uint64_t start = be64toh(start_network);
-        uint64_t end = be64toh(end_network);
-        uint8_t priority = request[PACKET_REQUEST_PRIO_OFFSET];
-        printf("Received %d of %d bytes\n",
-               PACKET_REQUEST_SIZE, PACKET_REQUEST_SIZE);
-        printf("Start: %" PRIu64 "\nEnd: %" PRIu64 "\nPriority: %u\n",
-               start, end, (unsigned int)priority);
-
-        uint64_t answer = 0;
-        int found = reverse_hash(hash, start, end, &answer);
-        if (found == 1) {
-            printf("Answer: %" PRIu64 "\n", answer);
-            (void)send_answer(client_fd, answer);
-        } else if (found == 0) {
-            fprintf(stderr, "No matching number found in the range\n");
-        }
-        close(client_fd);
+        queue_client(client_fd);
     }
 }

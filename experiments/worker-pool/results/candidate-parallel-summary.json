@@ -1,0 +1,10 @@
+{
+  "workers": 4,
+  "server_threads_including_main": 5,
+  "client_threads": 12,
+  "completed_requests": 64,
+  "correct_answers": 64,
+  "incomplete_connection_held_open": true,
+  "source_sha256": "e417ea2ed3ce1cc764f046ae77b9862290c3550d63ec78ea8abe7f98802988ab",
+  "passed": true
+}

@@ -1,0 +1,11 @@
+{
+  "source_sha256": "e417ea2ed3ce1cc764f046ae77b9862290c3550d63ec78ea8abe7f98802988ab",
+  "makefile_sha256": "37f58d4a558bb81eae47c72a13f0f1e37b63502f1025d25676701c5d03c79d33",
+  "kernel": "6.8.0-139-generic",
+  "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "logical_cpus": 4,
+  "worker_environment": [
+    "THREADRUNNER_WORKERS=4"
+  ],
+  "thread_count_including_main": 5
+}
