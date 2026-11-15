@@ -68,9 +68,9 @@ overriding only host and port. It saves build, protocol and client logs under
 checks 64 requests using 12 client threads while one incomplete connection
 stays open. It saves a separate evidence directory.
 
-Loopback tests and cross-VM workloads have distinct scopes. The worker-pool
-500-request cross-VM performance comparison was still running when this
-experiment checkpoint was prepared; no final speedup is claimed here.
+The four-worker cross-VM run returned 500/500 correct answers for seed 5041.
+Its priority-weighted latency score was 85.6% lower than the serial baseline
+in that run. See `experiments/worker-pool/README.md` for the evidence.
 
 ## Branches and release
 

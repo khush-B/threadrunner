@@ -1,0 +1,13 @@
+{
+  "baseline_commit": "b9362c4",
+  "worker_pool_commit": "6881880",
+  "workers": 4,
+  "seed": 5041,
+  "completed_requests": 500,
+  "correct_answers": 500,
+  "client_exit": 0,
+  "tee_exit": 0,
+  "baseline_weighted_latency_us": 3154329362.05,
+  "worker_pool_weighted_latency_us": 452930228.85,
+  "weighted_latency_reduction_percent": 85.6
+}

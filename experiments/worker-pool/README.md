@@ -76,10 +76,13 @@ The candidate source SHA256 is
 | Official small client, loopback | 20/20 correct |
 | Concurrent-client check, 4 workers | 64/64 correct; incomplete connection stayed open |
 | Serial baseline, full workload, seed 5041 | 500/500 correct; client and tee exit 0 |
-| Four-worker full workload | In progress at checkpoint; final result not yet verified |
+| Four-worker full workload, seed 5041 | 500/500 correct; client and tee exit 0 |
 
 Serial baseline mean latency: 2,508,132,637.256 microseconds.
 Serial baseline priority-weighted latency: 3,154,329,362.05 microseconds.
+Four-worker priority-weighted latency: 452,930,228.852 microseconds.
+That is 85.6% lower than the serial score for this workload. The raw log,
+settings, file hashes and summary are in `results/pool4-seed5041/`.
 These are per-request metrics including queueing, not total run duration.
 
 The candidate build and local summaries identify Linux 6.8.0-139-generic and
@@ -89,10 +92,9 @@ in `results/candidate-server-environment.json`.
 
 ## Remaining work
 
-- Finish and independently validate the four-worker full run.
 - Compare 1, 2 and 4 workers with matched settings and repeat measurements.
 - Explain the results and choose a design based on evidence.
 - Update the course report with motivation, setup, results and conclusion.
 
-No completed candidate speedup or final-submission readiness is claimed by
-this checkpoint. Priority scheduling and caching remain separate experiments.
+This result covers one run at seed 5041. The final worker count is still open.
+Priority scheduling and caching remain separate experiments.

@@ -1,0 +1,9 @@
+variant=worker-pool
+workers=4
+seed=5041
+total=500
+start=0
+difficulty=30000000
+rep=20
+delay_us=600000
+lambda=1.5
