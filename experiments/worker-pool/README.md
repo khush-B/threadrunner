@@ -104,12 +104,28 @@ GCC 13.3.0. The server VM reports four logical CPUs; the observed candidate
 process has four workers plus its main thread. Environment details are saved
 in `results/candidate-server-environment.json`.
 
+## Second-seed check
+
+A shorter matched run used seed 7919 and 24 requests, with the other client
+settings unchanged. Both builds came from exact Git commits and used the same
+compiler flags. The official client exited successfully for both runs, and
+the request numbers and priorities matched.
+
+| Server | Correct | Weighted latency score (s) |
+| --- | ---: | ---: |
+| Original serial server | 24/24 | 206.177 |
+| Four workers | 24/24 | 42.417 |
+
+Four workers scored 79.43% lower in this check. This supports the direction
+of the 500-request result on a different seed, with a smaller workload.
+See [the raw logs and settings](results/serial-vs-pool4-seed7919/).
+
 ## Remaining work
 
-- Repeat measurements and use additional seeds to check how stable the result is.
+- Repeat the full 500-request comparison if time allows. The shorter second-seed check is complete.
 - Choose the final configuration after checking the intended evaluation environment.
 - Update the course report with motivation, setup, results and conclusion.
 
-This comparison uses one run per configuration with seed 5041. Four workers
-are the leading choice on the tested VM; the final worker count is still open.
+Four workers are the leading choice on the tested VM. The final worker count
+is still open until the team checks the intended evaluation environment.
 Priority scheduling and caching remain separate experiments.

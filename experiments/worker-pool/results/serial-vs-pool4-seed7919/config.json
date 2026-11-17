@@ -1,0 +1,30 @@
+{
+  "client_sha256": "5104b664f5df8dd5b1385d6fd7944ef2cf3c034f401123e51f16aaa97b2f2c7a",
+  "client_args": [
+    "192.168.101.10",
+    "5003",
+    "7919",
+    "24",
+    "0",
+    "30000000",
+    "20",
+    "600000",
+    "1.5"
+  ],
+  "compiler_flags": "-std=gnu11 -Wall -Wextra -Werror -O2",
+  "server_environment": [
+    "Linux 6.8.0-139-generic",
+    "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "4",
+    "Tue Nov 17 02:12:18 PM UTC 2026"
+  ],
+  "client_environment": [
+    "Linux 6.8.0-139-generic",
+    "Tue Nov 17 02:12:18 PM UTC 2026"
+  ],
+  "commits": {
+    "serial": "b9362c4717e2192f6bfe2fd9941476a097d1b92a",
+    "pool4": "7c6a3d903cc39fa1c0c4feac4bbb6be8fe02fb0b"
+  },
+  "comparison": "24-request second-seed check"
+}
