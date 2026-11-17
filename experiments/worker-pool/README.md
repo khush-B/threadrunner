@@ -62,7 +62,7 @@ the score as sum(latency_us * priority) / request_count. Preserve raw logs,
 source checksums and worker count. Repeat comparisons and test additional
 seeds before drawing a final performance conclusion.
 
-## Completed evidence, 10 November 2026
+## Correctness checks
 
 `results/` contains original completed logs and summaries copied from the VMs.
 The candidate source SHA256 is
@@ -75,15 +75,29 @@ The candidate source SHA256 is
 | Protocol/boundary/recovery tests | 12 passed |
 | Official small client, loopback | 20/20 correct |
 | Concurrent-client check, 4 workers | 64/64 correct; incomplete connection stayed open |
-| Serial baseline, full workload, seed 5041 | 500/500 correct; client and tee exit 0 |
-| Four-worker full workload, seed 5041 | 500/500 correct; client and tee exit 0 |
 
-Serial baseline mean latency: 2,508,132,637.256 microseconds.
-Serial baseline priority-weighted latency: 3,154,329,362.05 microseconds.
-Four-worker priority-weighted latency: 452,930,228.852 microseconds.
-That is 85.6% lower than the serial score for this workload. The raw log,
-settings, file hashes and summary are in `results/pool4-seed5041/`.
-These are per-request metrics including queueing, not total run duration.
+## Benchmark results
+
+The serial baseline and all three worker-pool runs used seed 5041 and the
+same 500-request workload. The raw logs contain the same set of request
+numbers and priorities, including repeats. All client and log exit codes
+were 0. Scores were recalculated from the raw client logs.
+
+| Server | Correct | Weighted latency score (us) | Versus serial | Raw log and saved evidence |
+| --- | ---: | ---: | ---: | --- |
+| Original serial server | 500/500 | 3,154,329,362.050 | Baseline | [Evidence](results/serial-seed5041-client.log) |
+| One worker | 500/500 | 3,004,263,279.312 | 4.8% lower | [Evidence](results/pool1-seed5041/) |
+| Two workers | 500/500 | 1,450,348,990.396 | 54.0% lower | [Evidence](results/pool2-seed5041/) |
+| Four workers | 500/500 | 452,930,228.852 | 85.6% lower | [Evidence](results/pool4-seed5041/) |
+
+Four workers had the lowest score on this workload: 85.6% lower than
+the serial baseline. The score averages priority times latency across
+requests, including queueing; it is not total benchmark duration.
+
+The four-worker evidence includes checksums of the tested source and
+Makefile. The one- and two-worker evidence includes the raw client logs,
+exit codes and summaries; separate server-side checksums were not
+captured for those runs.
 
 The candidate build and local summaries identify Linux 6.8.0-139-generic and
 GCC 13.3.0. The server VM reports four logical CPUs; the observed candidate
@@ -92,9 +106,10 @@ in `results/candidate-server-environment.json`.
 
 ## Remaining work
 
-- Compare 1, 2 and 4 workers with matched settings and repeat measurements.
-- Explain the results and choose a design based on evidence.
+- Repeat measurements and use additional seeds to check how stable the result is.
+- Choose the final configuration after checking the intended evaluation environment.
 - Update the course report with motivation, setup, results and conclusion.
 
-This result covers one run at seed 5041. The final worker count is still open.
+This comparison uses one run per configuration with seed 5041. Four workers
+are the leading choice on the tested VM; the final worker count is still open.
 Priority scheduling and caching remain separate experiments.

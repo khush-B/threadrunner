@@ -9,5 +9,5 @@ messages.h text eol=lf
 # Keep captured evidence in LF; preserve original trailing spaces in raw logs.
 experiments/worker-pool/results/* text eol=lf
 experiments/worker-pool/results/*.log whitespace=-blank-at-eol
-experiments/worker-pool/results/pool4-seed5041/* text eol=lf
-experiments/worker-pool/results/pool4-seed5041/*.log whitespace=-blank-at-eol
+experiments/worker-pool/results/*/* text eol=lf
+experiments/worker-pool/results/*/*.log whitespace=-blank-at-eol

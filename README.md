@@ -68,9 +68,11 @@ overriding only host and port. It saves build, protocol and client logs under
 checks 64 requests using 12 client threads while one incomplete connection
 stays open. It saves a separate evidence directory.
 
-The four-worker cross-VM run returned 500/500 correct answers for seed 5041.
-Its priority-weighted latency score was 85.6% lower than the serial baseline
-in that run. See `experiments/worker-pool/README.md` for the evidence.
+The serial baseline and the one-, two-, and four-worker cross-VM runs each
+returned 500/500 correct answers for seed 5041. Four workers scored 85.6%
+lower than the serial baseline on that workload. See the
+[experiment comparison](experiments/worker-pool/README.md#benchmark-results)
+for the scores and raw logs.
 
 ## Branches and release
 
@@ -79,8 +81,8 @@ in that run. See `experiments/worker-pool/README.md` for the evidence.
 `experiment-worker-pool` contains the bounded-worker experiment. Its protocol
 and hashing semantics are unchanged from the milestone baseline.
 
-Experiment details, fixed client arguments, saved baseline results and pending
-comparisons are documented in `experiments/worker-pool/README.md`.
+The experiment README documents the client settings, benchmark comparison,
+and checks still needed before selecting the final configuration.
 
 Priority is parsed but does not determine scheduling. Caching is not implemented.
 An incomplete connection occupies one worker; enough stalled clients can occupy
